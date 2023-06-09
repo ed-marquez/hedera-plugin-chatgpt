@@ -1,0 +1,42 @@
+﻿MAINNET BASEURL:,https://mainnet-public.mirrornode.hedera.com/,
+TESTNET BASEURL:,https://testnet.mirrornode.hedera.com/,
+PREVIEWNET BASEURL:,https://previewnet.mirrornode.hedera.com/,
+,,
+Account balances endpoint:,,
+/api/v1/balances,,
+,,
+List account balances:,,
+"Returns a timestamped list of account balances on the network, limited to at most 50 token balances per account as outlined in HIP-367. This includes both HBAR and token balances for accounts.",,
+,,
+Query Parameters:,,
+account.id,string,Account id or account alias with no shard realm or evm address with no shard realm
+account.balance,string,The optional balance value to compare against
+account.publickey,string,The account's public key to compare against
+limit,integer,The maximum number of items to return
+order,string,The order in which items are listed
+,,
+,,
+Response Item:,Description:,
+timestamp,The seconds.nanoseconds of the timestamp at which the list of balances for each account are returned,
+balances,List of balances for each account,
+account,The ID of the account,
+balance,The balance of the account,
+tokens,The tokens that are associated to this account,
+tokens.token_id,The ID of the token associated to this account,
+tokens.balance,The token balance for the specified token associated to this account,
+links.next,Hyperlink to the next page of results,
+,,
+,,
+Filter Operator:,Example:,Description:
+lt (less than),/api/v1/balances?account.id=lt:0.0.1000,"Returns the balances of account IDs less than 1,000"
+lte (less than or equal to),/api/v1/balances?account.id=lte:0.0.1000,"Returns the balances account IDs less than or equal to 1,000"
+gt (greater than),/api/v1/balances?account.id=gt:0.0.1000,"Returns the balances of account IDs greater than to 1,000"
+gte (greater than or equal to),/api/v1/balances?account.id=gte:0.0.1000,"Returns the balances of account IDs greater than or equal to 1,000"
+order (order asc or desc values),/api/v1/balances?order=asc,Lists balances in ascending order
+order (order asc or desc values),/api/v1/balances?order=desc,Lists balances in descending order
+,,
+Example Requests:,Description:,
+/api/v1/balances?account.id=0.0.1000,"Returns balance for account ID 1,000",
+/api/v1/balances?account.balance=gt:1000,Returns all account IDs that have a balance greater than 1000 tinybars,
+/api/v1/balances?timestamp=1566562500.040961001,Returns all account balances referencing the latest snapshot that occurred prior to 1566562500 seconds and 040961001 nanoseconds,
+/api/v1/balances?account.publickey=2b60955bcbf0cf5e9ea880b52e5b6 3f664b08edf6ed15e301049517438d61864,Returns balance information for 2b60955bcbf0cf5e9ea880b52e5b63f664b08edf6ed 15e301049517438d61864 public key,
