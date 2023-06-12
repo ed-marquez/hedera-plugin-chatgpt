@@ -16,7 +16,11 @@ paths:
           schema:
             type: string
           description: The ID of the Hedera account
-          required: true
+        - in: query
+          name: token_id
+          schema:
+            type: string
+          description: The token id of the HTS Token
       responses:
         "200":
           description: OK

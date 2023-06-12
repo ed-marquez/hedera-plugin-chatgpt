@@ -8,7 +8,7 @@ class HederaPlugin:
   def __init__(self, base_url):
     self.base_url = base_url
 
-  def get_account_balance(self, account_id):
+  def get_account_balance(self, account_id, token_id):
     endpoint = "/api/v1/balances"
     url = f"{self.base_url}{endpoint}?account.id={account_id}"
     response = requests.get(url)
@@ -17,8 +17,24 @@ class HederaPlugin:
       response_data = response.json()
       for item in response_data.get('balances', []):
         if item['account'] == account_id:
-          balance = float(item['balance']) * 1E-8
-          return balance
+          if token_id == '':
+            hBalance = float(item['balance']) * 1E-8
+            return hBalance
+          
+          else:
+            for token in item.get('tokens', []):
+              if token['token_id'] == token_id:
+                
+                endpoint2 = "/api/v1/tokens"
+                url2 = f"{self.base_url}{endpoint2}/{token_id}"
+                tInfo = requests.get(url2)
+                if tInfo.status_code == 200:
+                  tInfo_data = tInfo.json()
+                  decimals = float(tInfo_data['decimals'])
+                
+                  tBalance = float(token['balance']) / (10 ** decimals)
+
+                return tBalance
 
     return None
 
@@ -34,7 +50,8 @@ app = Flask(__name__)
 def get_balance():
   # Use query parameter 'account_id' to specify the account ID
   account_id = request.args.get('account_id', '')
-  balance = plugin.get_account_balance(account_id)
+  token_id = request.args.get('token_id', '')
+  balance = plugin.get_account_balance(account_id, token_id)
 
   if balance is not None:
     return jsonify({'account_id': account_id, 'balance': balance})
