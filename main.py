@@ -17,7 +17,8 @@ class HederaPlugin:
       response_data = response.json()
       for item in response_data.get('balances', []):
         if item['account'] == account_id:
-          return item['balance']
+          balance = float(item['balance']) * 1E-8
+          return balance
 
     return None
 

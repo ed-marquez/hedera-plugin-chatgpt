@@ -9,7 +9,7 @@
     },
     "api": {
         "type": "openapi",
-        "url": "https://chatgptmirrornodeplugin.ed-marquez.repl.co/openapi.yaml"
+        "url": "https://chatgptmirrornodeplugin.ed-marquez.repl.co/.well-known/openapi.yaml"
     },
     "logo_url": "http://localhost:5000/logo.png",
     "contact_email": "support@yourdomain.com",

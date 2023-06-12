@@ -6,7 +6,7 @@ info:
 servers:
   - url: https://chatgptmirrornodeplugin.ed-marquez.repl.co
 paths:
-  /balance:
+  /get_account_balance:
     get:
       operationId: getAccountBalance
       summary: Get the balance of a specific Hedera account
@@ -33,5 +33,5 @@ components:
           type: string
           description: The ID of the Hedera account.
         balance:
-          type: string
+          type: number
           description: The balance of the Hedera account.
