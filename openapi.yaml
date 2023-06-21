@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Hedera Account Balance Plugin
-  description: A plugin that allows the user to fetch the balance of a Hedera account using ChatGPT.
+  description: A plugin that allows the user to fetch the HBAR and token balance of a Hedera account using ChatGPT.
   version: 'v1'
 servers:
   - url: https://chatgptmirrornodeplugin.ed-marquez.repl.co
@@ -20,7 +20,7 @@ paths:
           name: token_id
           schema:
             type: string
-          description: The token id of the HTS Token
+          description: The token ID of the HTS Token
       responses:
         "200":
           description: OK
