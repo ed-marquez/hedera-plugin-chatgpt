@@ -1,59 +1,54 @@
-const express = require('express');
-const axios = require('axios');
-const path = require('path');
+const express = require("express");
+const axios = require("axios");
 const app = express();
-const port = 5000;
+const path = require("path");
 
-class HederaPlugin {
-  constructor(base_url) {
-    this.base_url = base_url;
-  }
+const baseURL = "https://mainnet-public.mirrornode.hedera.com";
 
-  async get_account_balance(account_id) {
-    const endpoint = "/api/v1/balances";
-    const url = `${this.base_url}${endpoint}?account.id=${account_id}`;
-
-    try {
-      const response = await axios.get(url);
-      if (response.status === 200) {
-        const response_data = response.data;
-        for (const item of response_data.balances || []) {
-          if (item.account === account_id) {
-            const balance = parseFloat(item.balance) * 1E-8;
-            return balance;
-          }
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    return null;
-  }
+async function getBalance(account_id, token_id) {
+	try {
+		let url = `${baseURL}/api/v1/balances?account.id=${account_id}`;
+		let response = await axios.get(url);
+		let balances = response.data.balances;
+		for (let item of balances) {
+			if (item.account === account_id) {
+				if (token_id === "") {
+					return parseFloat(item.balance) * 1e-8;
+				} else {
+					for (let token of item.tokens) {
+						if (token.token_id === token_id) {
+							let url2 = `${baseURL}/api/v1/tokens/${token_id}`;
+							let tInfo = await axios.get(url2);
+							let decimals = parseFloat(tInfo.data.decimals);
+							return parseFloat(token.balance) / 10 ** decimals;
+						}
+					}
+				}
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
+	return null;
 }
 
-// Initialize the plugin with the mainnet base URL
-const plugin = new HederaPlugin("https://mainnet-public.mirrornode.hedera.com");
-
-app.get('/get_account_balance', async (req, res) => {
-  const account_id = req.query.account_id;
-  const balance = await plugin.get_account_balance(account_id);
-
-  if (balance !== null) {
-    res.json({ account_id: account_id, balance: balance });
-  } else {
-    res.status(404).json({ error: 'Could not fetch account balance.' });
-  }
+app.get("/get_account_balance", async (req, res) => {
+	let account_id = req.query.account_id || "";
+	let token_id = req.query.token_id || "";
+	let balance = await getBalance(account_id, token_id);
+	if (balance != null) {
+		res.json({ account_id: account_id, balance: balance });
+	} else {
+		res.status(404).json({ error: "Could not fetch account balance." });
+	}
 });
 
-app.get('/.well-known/ai-plugin.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'ai-plugin.json'));
+app.get("/.well-known/ai-plugin.json", (req, res) => {
+	res.sendFile(path.join(__dirname, "ai-plugin.json"));
 });
 
-app.get('/.well-known/openapi.yaml', (req, res) => {
-  res.sendFile(path.join(__dirname, 'openapi.yaml'));
+app.get("/openapi.yaml", (req, res) => {
+	res.sendFile(path.join(__dirname, "openapi.yaml"));
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+app.listen(5000, () => console.log("Server running on port 5000"));
