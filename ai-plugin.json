@@ -9,7 +9,7 @@
     },
     "api": {
         "type": "openapi",
-        "url": "https://chatgptmirrornodeplugin.ed-marquez.repl.co/.well-known/openapi.yaml"
+        "url": "https://hedera-plugin-chatgpt.ed-marquez.repl.co/openapi.yaml"
     },
     "logo_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4642.png",
     "contact_email": "DevRel@swirldslabs.com",
