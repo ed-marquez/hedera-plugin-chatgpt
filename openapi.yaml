@@ -4,7 +4,7 @@ info:
   description: A plugin that allows the user to fetch the HBAR and token balance of a Hedera account using ChatGPT.
   version: 'v1'
 servers:
-  - url: https://chatgptmirrornodeplugin.ed-marquez.repl.co
+  - url: https://hedera-plugin-chatgpt.ed-marquez.repl.co
 paths:
   /get_account_balance:
     get:
