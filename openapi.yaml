@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
-  title: Hedera Account Balance
-  description: Get the HBAR and token balance of a Hedera account.
-  version: 'v2'
+  title: Hedera Info API
+  description: Get Hedera account (HBAR & tokens) & network (TPS, NFTs minted) information
+  version: "v3"
 servers:
   - url: https://hedera-account-balance-plugin.replit.app
 paths:
@@ -22,11 +22,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getAccountBalanceResponse'
-  /get_token_balance:
+                $ref: "#/components/schemas/getHbarBalanceResponse"
+  /get_single_token_balance:
     get:
-      operationId: getTokenBalance
-      summary: Get the token balance of a specific Hedera account
+      operationId: getSingleTokenBalance
+      summary: Get the balance of Hedera account for a single token ID
       parameters:
         - in: query
           name: account_id
@@ -44,10 +44,72 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getAccountBalanceResponse'
+                $ref: "#/components/schemas/getSingleTokenBalanceResponse"
+  /get_all_tokens_list:
+    get:
+      operationId: getAllTokensList
+      summary: Get the list of all the tokens that the Hedera account owns and is associated with.
+      parameters:
+        - in: query
+          name: account_id
+          schema:
+            type: string
+          description: The ID of the Hedera account
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllTokensListResponse"
+  /get_transactions_per_second:
+    get:
+      operationId: geTransactionsPerSecond
+      summary: Get the number of transactions per second (TPS) being processed by the Hedera network.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/geTransactionsPerSecond"
+  /get_nfts_minted_last_x_days:
+    get:
+      operationId: getNftsMintedLastXDays
+      summary: Get the number of NFTs minted on Hedera in the last one or more days. The number of days is provided by the user.
+      parameters:
+        - in: query
+          name: num_days
+          schema:
+            type: number
+          description: The number of days for which NFTs minted is retrieved
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getNftsMintedLastXDays"
+  /get_nfts_minted_last_x_hours:
+    get:
+      operationId: getNftsMintedLastXHours
+      summary: Get the number of NFTs minted on Hedera in the last 24 hours or less. The number of hours is provided by the user.
+      parameters:
+        - in: query
+          name: num_hours
+          schema:
+            type: number
+          description: The number of hours for which NFTs minted is retrieved
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getNftsMintedLastXHours"
 components:
   schemas:
-    getAccountBalanceResponse:
+    getHbarBalanceResponse:
       type: object
       properties:
         account:
@@ -56,3 +118,38 @@ components:
         balance:
           type: number
           description: The balance of the Hedera account.
+    getSingleTokenBalanceResponse:
+      type: object
+      properties:
+        association_status:
+          type: boolean
+          description: The status of the association between the Hedera account and the token ID. The account and token must be associated for the account to be able to own units of the token ID.
+        balance:
+          type: number
+          description: The token balance of the Hedera account. If the account and token ID are not associated, the account cannot have units of the token ID
+    getAllTokensListResponse:
+      type: object
+      properties:
+        token_list:
+          type: array
+          items:
+            type: string
+          description: The list of all tokens that the Hedera account owns. If a token has a zero balance, it means it is associated with the account.
+    geTransactionsPerSecond:
+      type: object
+      properties:
+        transaction_per_second:
+          type: number
+          description: The number of transactions per second (TPS) the Hedera network is processing.
+    getNftsMintedLastXDays:
+      type: object
+      properties:
+        nfts_minted_last_x_days:
+          type: number
+          description: The number of NFTs minted on Hedera in the last number of days.
+    getNftsMintedLastXHours:
+      type: object
+      properties:
+        nfts_minted_last_x_hours:
+          type: number
+          description: The number of NFTs minted on Hedera in the last number of hours.

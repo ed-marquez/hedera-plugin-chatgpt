@@ -1,17 +1,17 @@
 {
-    "schema_version": "v1",
-    "name_for_human": "Hedera Account Balance",
-    "name_for_model": "HederaAccountBalance",
-    "description_for_human": "Gets the HBAR and token balance of a Hedera account.",
-    "description_for_model": "Helps the user to fetch the balance of a Hedera account. The user can provide the account ID and token ID (optional) and the model will make a request to the Hedera mirror node REST API.",
-    "auth": {
-        "type": "none"
-    },
-    "api": {
-        "type": "openapi",
-        "url": "https://hedera-account-balance-plugin.replit.app/openapi.yaml"
-    },
-    "logo_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4642.png",
-    "contact_email": "DevRel@swirldslabs.com",
-    "legal_info_url": "https://hedera.com/terms"
+	"schema_version": "v1",
+	"name_for_human": "Hedera Info",
+	"name_for_model": "HederaInformation",
+	"description_for_human": "Get info for Hedera accounts (HBAR & tokens) and the network (TPS, NFTs minted)",
+	"description_for_model": "Help users fetch the information about Hedera accounts or the network itself. The user can ask about HBAR or token balances and relations for accounts, or about transactions per second (TPS) and NFTs minted in the last hours/days on the network.",
+	"auth": {
+		"type": "none"
+	},
+	"api": {
+		"type": "openapi",
+		"url": "https://hedera-account-balance-plugin.replit.app/openapi.yaml"
+	},
+	"logo_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4642.png",
+	"contact_email": "DevRel@swirldslabs.com",
+	"legal_info_url": "https://hedera.com/terms"
 }
