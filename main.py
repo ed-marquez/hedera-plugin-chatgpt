@@ -101,7 +101,8 @@ class HederaPlugin:
     return total_nfts_minted
 
   def get_nfts_minted_last_x_hours(self, num_hours):
-    if float(num_hours) > 24:
+    num_hours = float(num_hours)
+    if num_hours > 24:
       num_hours = 24
 
     time_window_in_seconds = num_hours * 3600
@@ -348,7 +349,7 @@ def get_nfts_minted_last_x_days():
       {'error':
        'Could not get the number of NFTs minted at this moment.'}), 404
 
-@app.route('/get_nfts_minted_last_x_hours', methods=['GET', 'POST'])
+@app.route('/get_nfts_minted_last_x_hours', methods=['GET'])
 def get_nfts_minted_last_x_hours():
   num_hours = request.args.get('num_hours', '')
   nfts_minted_last_x_hours = plugin.get_nfts_minted_last_x_hours(num_hours)
